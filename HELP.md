@@ -1,3 +1,4 @@
+```text
 Usage:
   -access string
     	Access config file (default "./access.yaml")
@@ -13,6 +14,9 @@ Usage:
     	Host private key file, repeatable
   -socket-network string
     	Reverse tunnel socket network (default "tcp")
+  -version
+    	Print version and exit
 
 Signals:
   SIGHUP - Reload access config
+```

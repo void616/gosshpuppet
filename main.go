@@ -5,6 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"gosshpuppet/internal"
 	"gosshpuppet/internal/callback"
 	"gosshpuppet/internal/command"
 	"gosshpuppet/internal/config"
@@ -16,6 +17,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 	"time"
 
@@ -34,7 +36,8 @@ func main() {
 		argIdleTimeout    time.Duration
 		argOverallTimeout time.Duration
 
-		argDebug bool
+		argDebug   bool
+		argVersion bool
 	)
 	{
 		flag.StringVar(&argListenAddr, "listen", ":2222", "Listen address/port")
@@ -47,6 +50,7 @@ func main() {
 		flag.DurationVar(&argOverallTimeout, "overall-timeout", 0, "Overall session timeout")
 
 		flag.BoolVar(&argDebug, "debug", false, "Debug logs")
+		flag.BoolVar(&argVersion, "version", false, "Print version and exit")
 	}
 
 	flag.Usage = func() {
@@ -59,6 +63,11 @@ func main() {
 		fmt.Fprintln(w, "  SIGHUP - Reload access config")
 	}
 	flag.Parse()
+
+	if argVersion {
+		fmt.Println(internal.Version, runtime.Version())
+		os.Exit(0)
+	}
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
